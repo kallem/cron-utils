@@ -59,7 +59,8 @@ public class FieldConstraintsBuilder {
                 return this;
             case DAY_OF_WEEK:
                 stringMapping = daysOfWeekMapping();
-                endRange = 6;
+                startRange = 1;
+                endRange = 7;
                 return this;
             case DAY_OF_MONTH:
                 startRange = 1;

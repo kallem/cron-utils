@@ -49,7 +49,7 @@ public class OnFieldValueGeneratorTest {
 
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremes() throws Exception {
-        List<Integer> candidates = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1,32);
+        List<Integer> candidates = fieldValueGenerator.generateCandidates(1, 32);
         assertEquals(1, candidates.size());
         assertEquals(day, candidates.get(0), 0);
     }

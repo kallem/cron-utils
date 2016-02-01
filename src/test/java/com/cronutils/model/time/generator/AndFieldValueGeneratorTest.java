@@ -64,7 +64,7 @@ public class AndFieldValueGeneratorTest {
 
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremes() throws Exception {
-        List<Integer> candidates = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(value0, value2);
+        List<Integer> candidates = fieldValueGenerator.generateCandidates(value0, value2);
         assertEquals(1, candidates.size());
         assertEquals(value1, candidates.get(0), 0);
     }

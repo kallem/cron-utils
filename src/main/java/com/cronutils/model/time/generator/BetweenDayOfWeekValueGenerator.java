@@ -60,7 +60,7 @@ class BetweenDayOfWeekValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer>values = Lists.newArrayList();
         Between between = (Between) expression;
         

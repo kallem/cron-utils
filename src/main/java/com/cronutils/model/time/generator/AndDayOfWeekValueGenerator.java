@@ -23,7 +23,8 @@ class AndDayOfWeekValueGenerator extends FieldValueGenerator {
         this.mondayDoWValue = mondayDoWValue;
     }
 
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    @Override
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer> values = Lists.newArrayList();
         And and = (And) expression;
 

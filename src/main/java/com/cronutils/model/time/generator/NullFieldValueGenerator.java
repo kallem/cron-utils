@@ -32,7 +32,7 @@ class NullFieldValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         return Lists.newArrayList();
     }
 

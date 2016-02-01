@@ -41,10 +41,10 @@ class OnFieldValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer> values = Lists.newArrayList();
         int time = ((On) expression).getTime().getValue();
-        if(time>start && time<end){
+        if(time>=start && time<=end){
             values.add(time);
         }
         return values;

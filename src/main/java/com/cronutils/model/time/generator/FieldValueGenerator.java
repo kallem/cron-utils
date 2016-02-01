@@ -46,19 +46,8 @@ public abstract class FieldValueGenerator {
      * @throws NoSuchValueException - if there is no previous value
      */
     public abstract int generatePreviousValue(int reference) throws NoSuchValueException;
-    protected abstract List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end);
+    public abstract List<Integer> generateCandidates(int start, int end);
     public abstract boolean isMatch(int value);
-
-    public final List<Integer> generateCandidates(int start, int end){
-        List<Integer> candidates = generateCandidatesNotIncludingIntervalExtremes(start, end);
-        if(isMatch(start)){
-            candidates.add(start);
-        }
-        if(isMatch(end)){
-            candidates.add(end);
-        }
-        return candidates;
-    }
 
     protected abstract boolean matchesFieldExpressionClass(FieldExpression fieldExpression);
 }

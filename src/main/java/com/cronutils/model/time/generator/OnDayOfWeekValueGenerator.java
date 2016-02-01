@@ -57,11 +57,11 @@ class OnDayOfWeekValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer>values = Lists.newArrayList();
         try {
-            int reference = generateNextValue(start);
-            while(reference<end){
+            int reference = generateNextValue(start - 1);
+            while(reference<=end){
                 values.add(reference);
                 reference=generateNextValue(reference);
             }

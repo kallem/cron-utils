@@ -39,7 +39,7 @@ public class NullFieldValueGeneratorTest {
 
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremes() throws Exception {
-        assertTrue(fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(0, Integer.MAX_VALUE).isEmpty());
+        assertTrue(fieldValueGenerator.generateCandidates(0, Integer.MAX_VALUE).isEmpty());
     }
 
     @Test

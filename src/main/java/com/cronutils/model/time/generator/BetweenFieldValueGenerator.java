@@ -30,11 +30,18 @@ class BetweenFieldValueGenerator extends FieldValueGenerator {
         Between between = (Between)expression;
         int candidate = new EveryFieldValueGenerator(between.getEvery()).generateNextValue(reference);
 
-        if(candidate > map(between.getTo())){
+        // Is below the bottom limit?
+        if (candidate <= map(between.getFrom())) {
+            return map(between.getFrom());
+        }
+        // Is within limit?
+        else if (candidate <= map(between.getTo())) {
+            return candidate;
+        }
+        // Over the top
+        else {
             throw new NoSuchValueException();
         }
-
-        return candidate;
     }
 
     @Override
@@ -49,7 +56,7 @@ class BetweenFieldValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer> values = Lists.newArrayList();
         //check overlapping ranges: x1 <= y2 && y1 <= x2
         Between between = (Between)expression;
@@ -65,13 +72,10 @@ class BetweenFieldValueGenerator extends FieldValueGenerator {
                 rangestart=expressionStart;
             }
             try {
-                int reference = generateNextValue(rangestart);
-                while(reference<rangeend){
+                int reference = rangestart;
+                while(reference<=rangeend){
                     values.add(reference);
                     reference = generateNextValue(reference);
-                }
-                if(rangeend!=end){
-                    values.add(reference);
                 }
             } catch (NoSuchValueException e) {}
         }

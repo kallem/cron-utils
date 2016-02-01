@@ -14,7 +14,6 @@ import com.cronutils.model.time.generator.NoSuchValueException;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.Validate;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -148,9 +147,11 @@ public class ExecutionTime {
 
         NearestValue nearestValue;
         DateTime newDate;
+
         if(year.isEmpty()){
             return initDateTime(yearsValueGenerator.generateNextValue(date.getYear()), lowestMonth, lowestDay, lowestHour, lowestMinute, lowestSecond, date.getZone());
         }
+
         if(!months.getValues().contains(date.getMonthOfYear())) {
             nearestValue = months.getNextValue(date.getMonthOfYear(), 0);
             int nextMonths = nearestValue.getValue();
@@ -160,10 +161,11 @@ public class ExecutionTime {
                 return nextClosestMatch(newDate);
             }
             if (nearestValue.getValue() < date.getMonthOfYear()) {
-            	date = date.plusYears(1);
+                date = date.plusYears(1);
             }
             return initDateTime(date.getYear(), nextMonths, lowestDay, lowestHour, lowestMinute, lowestSecond, date.getZone());
         }
+
         if(!days.getValues().contains(date.getDayOfMonth())) {
             nearestValue = days.getNextValue(date.getDayOfMonth(), 0);
             if(nearestValue.getShifts()>0){
@@ -171,10 +173,11 @@ public class ExecutionTime {
                 return nextClosestMatch(newDate);
             }
             if (nearestValue.getValue() < date.getDayOfMonth()) {
-            	date = date.plusMonths(1);
+                date = date.plusMonths(1);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), nearestValue.getValue(), lowestHour, lowestMinute, lowestSecond, date.getZone());
         }
+
         if(!hours.getValues().contains(date.getHourOfDay())) {
             nearestValue = hours.getNextValue(date.getHourOfDay(), 0);
             int nextHours = nearestValue.getValue();
@@ -185,10 +188,11 @@ public class ExecutionTime {
                 return nextClosestMatch(newDate);
             }
             if (nearestValue.getValue() < date.getHourOfDay()) {
-            	date = date.plusDays(1);
+                date = date.plusDays(1);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), nextHours, lowestMinute, lowestSecond, date.getZone());
         }
+
         if(!minutes.getValues().contains(date.getMinuteOfHour())) {
             nearestValue = minutes.getNextValue(date.getMinuteOfHour(), 0);
             int nextMinutes = nearestValue.getValue();
@@ -199,10 +203,11 @@ public class ExecutionTime {
                 return nextClosestMatch(newDate);
             }
             if (nearestValue.getValue() < date.getMinuteOfHour()) {
-            	date = date.plusHours(1);
+                date = date.plusHours(1);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), nextMinutes, lowestSecond, date.getZone());
         }
+
         if(!seconds.getValues().contains(date.getSecondOfMinute())) {
             nearestValue = seconds.getNextValue(date.getSecondOfMinute(), 0);
             int nextSeconds = nearestValue.getValue();
@@ -214,10 +219,11 @@ public class ExecutionTime {
                 return nextClosestMatch(newDate);
             }
             if (nearestValue.getValue() < date.getSecondOfMinute()) {
-            	date = date.plusMinutes(1);
+                date = date.plusMinutes(1);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), date.getMinuteOfHour(), nextSeconds, date.getZone());
         }
+
         return date;
     }
 
@@ -356,37 +362,33 @@ public class ExecutionTime {
         return new Interval(lastExecution(date), date).toDuration();
     }
 
-	private List<Integer> generateDayCandidatesQuestionMarkNotSupported(int year, int month, WeekDay mondayDoWValue) {
-		DateTime date = new DateTime(year, month, 1, 1, 1);
-		Set<Integer> candidates = Sets.newHashSet();
-		log.debug(" computing days for [{}]", daysOfWeekCronField.getExpression().getClass().toString());
-		if (daysOfMonthCronField.getExpression() instanceof Always && daysOfWeekCronField.getExpression() instanceof Always) {
-			log.debug(" computing days 1");
-			candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month).generateCandidates(1,
-					date.dayOfMonth().getMaximumValue()));
-		} else {
-			if (daysOfMonthCronField.getExpression() instanceof Always) {
-				log.debug(" computing days 2");
-				candidates.addAll(FieldValueGeneratorFactory.createDayOfWeekValueGeneratorInstance(daysOfWeekCronField, year, month, mondayDoWValue)
-						.generateCandidates(1, date.dayOfMonth().getMaximumValue()));
-			} else {
-				if (daysOfWeekCronField.getExpression() instanceof Always) {
-					log.debug(" computing days 3");
-					candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month).generateCandidates(
-							1, date.dayOfMonth().getMaximumValue()));
-				} else {
-					log.debug(" computing days 4");
-					candidates.addAll(FieldValueGeneratorFactory.createDayOfWeekValueGeneratorInstance(daysOfWeekCronField, year, month, mondayDoWValue)
-							.generateCandidates(1, date.dayOfMonth().getMaximumValue()));
-					candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month).generateCandidates(
-							1, date.dayOfMonth().getMaximumValue()));
-				}
-			}
-		}
-		List<Integer> candidatesList = Lists.newArrayList(candidates);
-		Collections.sort(candidatesList);
-		return candidatesList;
-	}
+    private List<Integer> generateDayCandidatesQuestionMarkNotSupported(int year, int month, WeekDay mondayDoWValue) {
+        DateTime date = new DateTime(year, month, 1, 1, 1);
+        Set<Integer> candidates = Sets.newHashSet();
+        log.debug(" computing days for [{}]", daysOfWeekCronField.getExpression().getClass().toString());
+        if (daysOfMonthCronField.getExpression() instanceof Always && daysOfWeekCronField.getExpression() instanceof Always) {
+            log.debug(" computing days 1");
+            candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month)
+                                      .generateCandidates(1, date.dayOfMonth().getMaximumValue()));
+        } else if (daysOfMonthCronField.getExpression() instanceof Always) {
+            log.debug(" computing days 2");
+            candidates.addAll(FieldValueGeneratorFactory.createDayOfWeekValueGeneratorInstance(daysOfWeekCronField, year, month, mondayDoWValue)
+                                      .generateCandidates(1, date.dayOfMonth().getMaximumValue()));
+        } else if (daysOfWeekCronField.getExpression() instanceof Always) {
+            log.debug(" computing days 3");
+            candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month)
+                                      .generateCandidates(1, date.dayOfMonth().getMaximumValue()));
+        } else {
+            log.debug(" computing days 4");
+            candidates.addAll(FieldValueGeneratorFactory.createDayOfWeekValueGeneratorInstance(daysOfWeekCronField, year, month, mondayDoWValue)
+                                      .generateCandidates(1, date.dayOfMonth().getMaximumValue()));
+            candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month)
+                                      .generateCandidates(1, date.dayOfMonth().getMaximumValue()));
+        }
+        List<Integer> candidatesList = Lists.newArrayList(candidates);
+        Collections.sort(candidatesList);
+        return candidatesList;
+    }
 
     private List<Integer> generateDayCandidatesQuestionMarkSupported(int year, int month, WeekDay mondayDoWValue){
         DateTime date = new DateTime(year, month, 1,1,1);

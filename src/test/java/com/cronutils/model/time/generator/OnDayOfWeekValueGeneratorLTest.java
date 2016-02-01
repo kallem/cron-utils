@@ -94,7 +94,7 @@ public class OnDayOfWeekValueGeneratorLTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesLastDayDoWGreaterThanRequestedDoW() throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstanceLastDayDoWGreaterThanRequestedDoW();
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, lastDayDoWGreaterThanRequestedDoW_Day+1);
+        List<Integer> values = fieldValueGenerator.generateCandidates(1, lastDayDoWGreaterThanRequestedDoW_Day + 1);
         assertFalse(values.isEmpty());
         assertEquals(lastDayDoWGreaterThanRequestedDoW_Day, values.get(0), 0);
     }
@@ -102,7 +102,7 @@ public class OnDayOfWeekValueGeneratorLTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesLastDayDoWLessThanRequestedDoW() throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstanceLastDayDoWLessThanRequestedDoW();
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, lastDayDoWLessThanRequestedDoW_Day+1);
+        List<Integer> values = fieldValueGenerator.generateCandidates(1, lastDayDoWLessThanRequestedDoW_Day + 1);
         assertFalse(values.isEmpty());
         assertEquals(lastDayDoWLessThanRequestedDoW_Day, values.get(0), 0);
     }
@@ -110,7 +110,7 @@ public class OnDayOfWeekValueGeneratorLTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesLastDayDoWEqualToRequestedDoW() throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstanceLastDayDoWEqualToRequestedDoW();
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, lastDayDoWEqualToRequestedDoW_Day+1);
+        List<Integer> values = fieldValueGenerator.generateCandidates(1, lastDayDoWEqualToRequestedDoW_Day + 1);
         assertFalse(values.isEmpty());
         assertEquals(lastDayDoWEqualToRequestedDoW_Day, values.get(0), 0);
     }

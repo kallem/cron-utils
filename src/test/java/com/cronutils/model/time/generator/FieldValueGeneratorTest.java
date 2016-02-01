@@ -33,7 +33,7 @@ public class FieldValueGeneratorTest {
     public void testGenerateCandidates() throws Exception {
         int start = 1;
         int end = 2;
-        assertTrue(fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(start, end).isEmpty());
+        assertTrue(fieldValueGenerator.generateCandidates(start, end).isEmpty());
         List<Integer> candidates = fieldValueGenerator.generateCandidates(1, 2);
         assertFalse(candidates.isEmpty());
         assertEquals(2, candidates.size());

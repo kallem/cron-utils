@@ -55,14 +55,14 @@ public class BetweenFieldValueGeneratorTest {
 
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesFullInterval() throws Exception {
-        List<Integer> candidates = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(from, to);
+        List<Integer> candidates = fieldValueGenerator.generateCandidates(from, to);
         assertEquals(1, candidates.size());
         assertEquals(1, candidates.get(0), 0);
     }
 
     @Test
     public void testGenerateCandidatesNotIncludingIntervalRangesNotIntersectInterval() throws Exception {
-        assertTrue(fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(to+1, to+10).isEmpty());
+        assertTrue(fieldValueGenerator.generateCandidates(to + 1, to + 10).isEmpty());
     }
 
     @Test

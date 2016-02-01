@@ -46,7 +46,7 @@ public class AlwaysFieldValueGeneratorTest {
 
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremes() throws Exception {
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(0, 10);
+        List<Integer> values = fieldValueGenerator.generateCandidates(0, 10);
         for(int j = 1; j<10; j++){
             assertTrue(values.contains(j));
         }

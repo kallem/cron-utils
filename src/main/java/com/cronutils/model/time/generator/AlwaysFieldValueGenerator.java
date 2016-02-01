@@ -35,9 +35,9 @@ class AlwaysFieldValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer> values = Lists.newArrayList();
-        for(int j = start+1; j<end; j++){
+        for(int j = start; j<=end; j++){
             values.add(j);
         }
         return values;

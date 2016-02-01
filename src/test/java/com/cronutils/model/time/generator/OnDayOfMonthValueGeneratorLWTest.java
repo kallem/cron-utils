@@ -122,7 +122,7 @@ public class OnDayOfMonthValueGeneratorLWTest {
 
     public void testGenerateCandidatesNotIncludingIntervalExtremes(int month, int weekday) throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstance(month);
-        List<Integer> candidates = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, 32);
+        List<Integer> candidates = fieldValueGenerator.generateCandidates(1, 32);
         assertEquals(1, candidates.size());
         assertEquals(weekday, candidates.get(0), 0);
     }

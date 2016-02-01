@@ -54,7 +54,7 @@ public class EveryFieldValueGeneratorTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremes() throws Exception {
         int candidatesQty = 7;
-        List<Integer> candidates = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(0, time*candidatesQty);
+        List<Integer> candidates = fieldValueGenerator.generateCandidates(0, time * candidatesQty);
         assertEquals(candidatesQty-1, candidates.size());
     }
 

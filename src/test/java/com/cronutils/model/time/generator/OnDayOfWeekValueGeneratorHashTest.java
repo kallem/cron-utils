@@ -93,7 +93,7 @@ public class OnDayOfWeekValueGeneratorHashTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesLastDayDoWGreaterThanRequestedDoW() throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstanceFirstDayDoWGreaterThanRequestedDoW();
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, firstDayDoWGreaterThanRequestedDoW_Day +1);
+        List<Integer> values = fieldValueGenerator.generateCandidates(1, firstDayDoWGreaterThanRequestedDoW_Day + 1);
         assertFalse(values.isEmpty());
         assertEquals(firstDayDoWGreaterThanRequestedDoW_Day, values.get(0), 0);
     }
@@ -101,7 +101,7 @@ public class OnDayOfWeekValueGeneratorHashTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesLastDayDoWLessThanRequestedDoW() throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstanceLastDayDoWLessThanRequestedDoW();
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, firstDayDoWLessThanRequestedDoW_Day +1);
+        List<Integer> values = fieldValueGenerator.generateCandidates(1, firstDayDoWLessThanRequestedDoW_Day + 1);
         assertFalse(values.isEmpty());
         assertEquals(firstDayDoWLessThanRequestedDoW_Day, values.get(0), 0);
     }
@@ -109,7 +109,7 @@ public class OnDayOfWeekValueGeneratorHashTest {
     @Test
     public void testGenerateCandidatesNotIncludingIntervalExtremesLastDayDoWEqualToRequestedDoW() throws Exception {
         fieldValueGenerator = createFieldValueGeneratorInstanceLastDayDoWEqualToRequestedDoW();
-        List<Integer> values = fieldValueGenerator.generateCandidatesNotIncludingIntervalExtremes(1, firstDayDoWEqualToRequestedDoW_Day +1);
+        List<Integer> values = fieldValueGenerator.generateCandidates(1, firstDayDoWEqualToRequestedDoW_Day + 1);
         assertFalse(values.isEmpty());
         assertEquals(firstDayDoWEqualToRequestedDoW_Day, values.get(0), 0);
     }

@@ -44,7 +44,7 @@ class EveryFieldValueGenerator extends FieldValueGenerator {
     }
 
     @Override
-    protected List<Integer> generateCandidatesNotIncludingIntervalExtremes(int start, int end) {
+    public List<Integer> generateCandidates(int start, int end) {
         List<Integer>values = Lists.newArrayList();
         try {
             int reference = generateNextValue(start);
