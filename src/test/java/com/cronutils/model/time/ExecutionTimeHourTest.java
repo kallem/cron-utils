@@ -94,7 +94,7 @@ public class ExecutionTimeHourTest {
         assertEquals(20, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusHours(50);
+        expectedDateTime = expectedDateTime.plusHours(14);
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
@@ -135,7 +135,7 @@ public class ExecutionTimeHourTest {
     }
 
     @Test
-    public void testEndRange() {
+    public void testPeriodEndRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 0 21-23 * * * *");
 
@@ -168,7 +168,7 @@ public class ExecutionTimeHourTest {
     }
 
     @Test
-    public void testMultiRange() {
+    public void testDoubleRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 0 10-12,19-20 * * *");
 
@@ -260,6 +260,72 @@ public class ExecutionTimeHourTest {
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(21, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testPattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 5/9 * * * *");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2015, 8, 31, 23, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(23, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusHours(6);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusHours(9);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(14, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusHours(9);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(23, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testRangePattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 8-16/3 * * * *");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2015, 9, 1, 8, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(8, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusHours(3);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(11, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusHours(3);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(14, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusHours(16);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(8, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
 }

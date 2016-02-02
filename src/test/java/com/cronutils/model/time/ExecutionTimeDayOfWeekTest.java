@@ -94,7 +94,7 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(6, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusDays(5);
+        expectedDateTime = expectedDateTime.plusDays(4);
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
@@ -135,7 +135,7 @@ public class ExecutionTimeDayOfWeekTest {
     }
 
     @Test
-    public void testEndRange() {
+    public void testPeriodEndRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 0 0 * * FRI-SUN");
 
@@ -168,7 +168,7 @@ public class ExecutionTimeDayOfWeekTest {
     }
 
     @Test
-    public void testMultiRange() {
+    public void testDoubleRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 0 0 * * MON-TUE,THU-SAT");
 
@@ -236,6 +236,72 @@ public class ExecutionTimeDayOfWeekTest {
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testPattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 0 * * MON/3");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2015, 9, 3, 0, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(4, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(3);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(7, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(1);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(3);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(4, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testRangePattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 0 * * MON-SAT/2");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2015, 9, 2, 0, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(2);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(3);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(2);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
 }

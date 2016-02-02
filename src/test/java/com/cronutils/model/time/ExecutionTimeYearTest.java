@@ -182,4 +182,64 @@ public class ExecutionTimeYearTest {
             assertTrue(true);
         }
     }
+
+    @Test
+    public void testPattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 0 1 1 * 2017/2");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2017, 1, 1, 0, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(2017, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusYears(2);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(2019, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusYears(1);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(2021, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testRangePattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 0 1 1 * 2017-2021/2");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2017, 1, 1, 0, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(2017, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusYears(2);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(2019, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusYears(1);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(2021, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        try {
+            executionTime.nextExecution(executionDataTime);
+        } catch (final IllegalArgumentException e) {
+            assertTrue(true);
+        }
+    }
 }

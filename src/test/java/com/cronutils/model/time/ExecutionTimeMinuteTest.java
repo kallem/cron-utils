@@ -135,7 +135,7 @@ public class ExecutionTimeMinuteTest {
     }
 
     @Test
-    public void testEndRange() {
+    public void testPeriodEndRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 57-59 * * * *");
 
@@ -168,7 +168,7 @@ public class ExecutionTimeMinuteTest {
     }
 
     @Test
-    public void testMultiRange() {
+    public void testDoubleRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 10-12,31-32 * * * *");
 
@@ -260,6 +260,72 @@ public class ExecutionTimeMinuteTest {
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(57, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testPattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 5/25 * * * * *");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 47, 0);
+        DateTime expectedDateTime = new DateTime(2015, 8, 31, 20, 55, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(55, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(10);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(25);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(30, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(25);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(55, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testRangePattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 15-30/6 * * * * *");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 47, 0);
+        DateTime expectedDateTime = new DateTime(2015, 8, 31, 21, 15, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(15, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(6);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(21, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(6);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(27, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(63);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(15, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
 }

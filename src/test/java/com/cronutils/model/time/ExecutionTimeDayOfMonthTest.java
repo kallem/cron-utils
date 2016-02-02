@@ -135,7 +135,7 @@ public class ExecutionTimeDayOfMonthTest {
     }
 
     @Test
-    public void testEndRange() {
+    public void testPeriodEndRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 0 0 28-30 * * *");
 
@@ -168,7 +168,7 @@ public class ExecutionTimeDayOfMonthTest {
     }
 
     @Test
-    public void testMultiRange() {
+    public void testDoubleRange() {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("0 0 0 10-12,19-20 * *");
 
@@ -260,6 +260,72 @@ public class ExecutionTimeDayOfMonthTest {
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testPattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 0 9/9 * *");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2015, 9, 9, 0, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(9, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(9);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(18, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(9);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(27, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(12);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(9, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+    }
+
+    @Test
+    public void testRangePattern() {
+        CronParser parser = new CronParser(cronDefinition);
+        Cron cron = parser.parse("0 0 0 9-18/4 * *");
+
+        DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
+        DateTime expectedDateTime = new DateTime(2015, 9, 9, 0, 0, 0, 0);
+
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+
+        DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
+        assertEquals(9, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(4);
+        DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(13, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(4);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(17, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(21);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(9, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
 }
