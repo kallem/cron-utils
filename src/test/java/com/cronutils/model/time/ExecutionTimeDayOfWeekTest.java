@@ -69,9 +69,9 @@ public class ExecutionTimeDayOfWeekTest {
     }
 
     @Test
-    public void testMultiple() {
+    public void testMany() {
         CronParser parser = new CronParser(cronDefinition);
-        Cron cron = parser.parse("0 0 0 * * WED,FRI");
+        Cron cron = parser.parse("0 0 0 * * WED,FRI,SAT");
 
         DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
         DateTime expectedDateTime = new DateTime(2015, 9, 2, 0, 0, 0, 0);
@@ -86,6 +86,12 @@ public class ExecutionTimeDayOfWeekTest {
         DateTime executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusDays(1);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(6, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(5);

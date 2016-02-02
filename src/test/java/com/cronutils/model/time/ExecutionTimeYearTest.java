@@ -73,9 +73,9 @@ public class ExecutionTimeYearTest {
     }
 
     @Test
-    public void testMultiple() {
+    public void testMany() {
         CronParser parser = new CronParser(cronDefinition);
-        Cron cron = parser.parse("0 0 0 1 1 * 2017,2019");
+        Cron cron = parser.parse("0 0 0 1 1 * 2017,2019,2020");
 
         DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
         DateTime expectedDateTime = new DateTime(2017, 1, 1, 0, 0, 0, 0);
@@ -90,6 +90,12 @@ public class ExecutionTimeYearTest {
         DateTime executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(2019, nextExecutionDateTime.get(DateTimeFieldType.year()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusYears(1);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(2020, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         try {

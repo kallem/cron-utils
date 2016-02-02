@@ -67,9 +67,9 @@ public class ExecutionTimeMonthTest {
     }
 
     @Test
-    public void testMultiple() {
+    public void testMany() {
         CronParser parser = new CronParser(cronDefinition);
-        Cron cron = parser.parse("0 0 0 1 7,10 *");
+        Cron cron = parser.parse("0 0 0 1 5,7,9 *");
 
         DateTime startDateTime = new DateTime(2015, 8, 31, 20, 38, 0, 0);
         DateTime expectedDateTime = new DateTime(2015, 10, 1, 0, 0, 0, 0);
@@ -77,19 +77,25 @@ public class ExecutionTimeMonthTest {
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
 
         DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
-        assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.monthOfYear()));
+        assertEquals(9, nextExecutionDateTime.get(DateTimeFieldType.monthOfYear()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusMonths(9);
+        expectedDateTime = expectedDateTime.plusMonths(8);
         DateTime executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.monthOfYear()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMonths(2);
+        executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(7, nextExecutionDateTime.get(DateTimeFieldType.monthOfYear()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusMonths(3);
+        expectedDateTime = expectedDateTime.plusMonths(2);
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
-        assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.monthOfYear()));
+        assertEquals(9, nextExecutionDateTime.get(DateTimeFieldType.monthOfYear()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
 

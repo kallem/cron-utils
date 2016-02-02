@@ -69,9 +69,9 @@ public class ExecutionTimeMinuteTest {
     }
 
     @Test
-    public void testMultiple() {
+    public void testMany() {
         CronParser parser = new CronParser(cronDefinition);
-        Cron cron = parser.parse("0 10,15 * * * *");
+        Cron cron = parser.parse("0 10,15,20 * * * *");
 
         DateTime startDateTime = new DateTime(2015, 8, 31, 13, 38, 0, 0);
         DateTime expectedDateTime = new DateTime(2015, 8, 31, 14, 10, 0, 0);
@@ -88,7 +88,13 @@ public class ExecutionTimeMinuteTest {
         assertEquals(15, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusMinutes(55);
+        expectedDateTime = expectedDateTime.plusMinutes(5);
+        executionDataTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        assertEquals(20, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
+        assertEquals(expectedDateTime, nextExecutionDateTime);
+
+        expectedDateTime = expectedDateTime.plusMinutes(50);
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.minuteOfHour()));
