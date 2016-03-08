@@ -18,28 +18,34 @@ import java.util.List;
  * limitations under the License.
  */
 class EveryFieldValueGenerator extends FieldValueGenerator {
+    private Every every;
 
-    public EveryFieldValueGenerator(FieldExpression expression) {
-        super(expression);
+    public EveryFieldValueGenerator(final Every every) {
+        super(every);
+
+        this.every = every;
     }
 
     @Override
     public int generateNextValue(int reference) throws NoSuchValueException {
-        Every every = (Every)expression;
-        int period = every.getTime().getValue();
-        int remainder = reference % period;
-        return reference+(period-remainder);
+        final int start = every.getFrom().getValue();
+        if (reference < start) {
+            return start;
+        } else {
+            int period = every.getRepeat().getValue();
+            int remainder = reference % period;
+            return start + reference + (period - remainder);
+        }
     }
 
     @Override
     public int generatePreviousValue(int reference) throws NoSuchValueException {
-        Every every = (Every)expression;
-        int period = every.getTime().getValue();
+        int period = every.getRepeat().getValue();
         int remainder = reference % period;
         if(remainder == 0){
-            return reference-period;
+            return reference - period;
         }else{
-            return reference-remainder;
+            return reference - remainder;
         }
     }
 
@@ -48,7 +54,7 @@ class EveryFieldValueGenerator extends FieldValueGenerator {
         List<Integer>values = Lists.newArrayList();
         try {
             int reference = generateNextValue(start);
-            while(reference<end){
+            while(reference<=end){
                 values.add(reference);
                 reference=generateNextValue(reference);
             }
@@ -60,8 +66,7 @@ class EveryFieldValueGenerator extends FieldValueGenerator {
 
     @Override
     public boolean isMatch(int value) {
-        Every every = (Every)expression;
-        return (value % every.getTime().getValue())==0;
+        return (value % every.getRepeat().getValue())==0;
     }
 
     @Override

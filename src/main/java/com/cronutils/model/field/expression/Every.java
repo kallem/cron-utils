@@ -20,29 +20,40 @@ import com.cronutils.model.field.value.IntegerFieldValue;
  * Represents every x time on a cron field.
  */
 public class Every extends FieldExpression {
-    private IntegerFieldValue time;
+    private IntegerFieldValue from;
+    private IntegerFieldValue repeat;
 
-    public Every(FieldConstraints constraints, IntegerFieldValue time) {
+    public Every(FieldConstraints constraints, IntegerFieldValue repeat) {
         super(constraints);
-        if (time == null) {
-            time = new IntegerFieldValue(1);
-        }
-        this.time = time;
+
+        this.from = new IntegerFieldValue(0);
+        this.repeat = repeat != null ? repeat : new IntegerFieldValue(1);
+    }
+
+    public Every(final FieldConstraints constraints, final IntegerFieldValue from, final IntegerFieldValue repeat) {
+        super(constraints);
+
+        this.from = from != null ? from : new IntegerFieldValue(0);
+        this.repeat = repeat != null ? repeat : new IntegerFieldValue(1);
     }
 
     private Every(Every every){
-        this(every.constraints, every.time);
+        this(every.constraints, every.repeat);
     }
 
-    public IntegerFieldValue getTime() {
-        return time;
+    public IntegerFieldValue getFrom() {
+        return from;
+    }
+
+    public IntegerFieldValue getRepeat() {
+        return repeat;
     }
 
     @Override
     public String asString() {
-        if(time.getValue()==1){
+        if(repeat.getValue()==1){
             return "";
         }
-        return String.format("/%s", getTime());
+        return String.format("/%s", getRepeat());
     }
 }

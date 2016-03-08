@@ -124,10 +124,10 @@ class AndFieldValueGenerator extends FieldValueGenerator {
             return new BetweenFieldValueGenerator(expression);
         }
         if(expression instanceof Every){
-            return new EveryFieldValueGenerator(expression);
+            return new EveryFieldValueGenerator((Every) expression);
         }
         if(expression instanceof On){
-            return new OnFieldValueGenerator(expression);
+            return new OnFieldValueGenerator((On) expression);
         }
         throw new IllegalArgumentException(String.format("FieldExpression %s not supported!", expression.getClass()));
     }

@@ -89,16 +89,19 @@ class ExecutionTimeBuilder {
         }else{
             lowestAssigned=true;
         }
+
         if(minutes==null){
             minutes=lowestAssigned?timeNodeAlways(CronFieldName.MINUTE, 0, 59):timeNodeLowest(CronFieldName.MINUTE, 0, 59);
         }else{
             lowestAssigned=true;
         }
+
         if(hours==null){
             hours=lowestAssigned?timeNodeAlways(CronFieldName.HOUR, 0, 23):timeNodeLowest(CronFieldName.HOUR, 0, 23);
         }else{
             lowestAssigned=true;
         }
+
         if(daysOfMonthCronField==null){
             daysOfMonthCronField=lowestAssigned?
                     new CronField(CronFieldName.DAY_OF_MONTH, new Always(FieldConstraintsBuilder.instance().createConstraintsInstance())):
@@ -106,6 +109,7 @@ class ExecutionTimeBuilder {
         }else{
             lowestAssigned=true;
         }
+
         if(daysOfWeekCronField==null){
             daysOfWeekCronField=lowestAssigned?
                     new CronField(CronFieldName.DAY_OF_WEEK, new Always(FieldConstraintsBuilder.instance().createConstraintsInstance())):
@@ -113,9 +117,11 @@ class ExecutionTimeBuilder {
         }else{
             lowestAssigned=true;
         }
+
         if(months==null){
             months=lowestAssigned?timeNodeAlways(CronFieldName.MONTH, 0, 31):timeNodeLowest(CronFieldName.MONTH, 0, 31);
         }
+
         if(yearsValueGenerator==null){
             yearsValueGenerator =
                     FieldValueGeneratorFactory.forCronField(

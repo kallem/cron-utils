@@ -40,7 +40,7 @@ public class Between extends FieldExpression {
     }
 
     public Between(Between between) {
-        this(between.getConstraints(), between.getFrom(), between.getTo(), between.getEvery().getTime());
+        this(between.getConstraints(), between.getFrom(), between.getTo(), between.getEvery().getRepeat());
     }
 
     public FieldValue getFrom() {
@@ -62,7 +62,7 @@ public class Between extends FieldExpression {
             if (fromValue >= toValue) {
                 throw new IllegalArgumentException(String.format("Bad range defined! Defined range should satisfy from <= to, but was [%s, %s]", fromValue, toValue));
             }
-            if (every.getTime().getValue() > (toValue - fromValue)) {
+            if (every.getRepeat().getValue() > (toValue - fromValue)) {
                 throw new IllegalArgumentException("Every x time cannot exceed range length");
             }
         }

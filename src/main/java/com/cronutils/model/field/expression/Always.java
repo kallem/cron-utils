@@ -27,7 +27,7 @@ public class Always extends FieldExpression {
     }
 
     private Always(Always always) {
-        this(always.getConstraints(), always.getEvery().getTime());
+        this(always.getConstraints(), always.getEvery().getRepeat());
     }
 
     public Always(FieldConstraints constraints, IntegerFieldValue every) {

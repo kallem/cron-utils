@@ -18,13 +18,16 @@ import java.util.List;
  * limitations under the License.
  */
 class OnFieldValueGenerator extends FieldValueGenerator {
-    public OnFieldValueGenerator(FieldExpression expression) {
-        super(expression);
+    private On on;
+
+    public OnFieldValueGenerator(On on) {
+        super(on);
+        this.on = on;
     }
 
     @Override
     public int generateNextValue(int reference) throws NoSuchValueException {
-        int time = ((On) expression).getTime().getValue();
+        int time = on.getTime().getValue();
         if(time<=reference){
             throw new NoSuchValueException();
         }
@@ -33,7 +36,7 @@ class OnFieldValueGenerator extends FieldValueGenerator {
 
     @Override
     public int generatePreviousValue(int reference) throws NoSuchValueException {
-        int time = ((On) expression).getTime().getValue();
+        int time = on.getTime().getValue();
         if(time>=reference){
             throw new NoSuchValueException();
         }
@@ -43,7 +46,7 @@ class OnFieldValueGenerator extends FieldValueGenerator {
     @Override
     public List<Integer> generateCandidates(int start, int end) {
         List<Integer> values = Lists.newArrayList();
-        int time = ((On) expression).getTime().getValue();
+        int time = on.getTime().getValue();
         if(time>=start && time<=end){
             values.add(time);
         }
@@ -52,7 +55,7 @@ class OnFieldValueGenerator extends FieldValueGenerator {
 
     @Override
     public boolean isMatch(int value) {
-        return ((On) expression).getTime().getValue()==value;
+        return on.getTime().getValue()==value;
     }
 
     @Override

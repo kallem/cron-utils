@@ -69,9 +69,4 @@ public class EveryFieldValueGeneratorTest {
         assertTrue(fieldValueGenerator.matchesFieldExpressionClass(mock(Every.class)));
         assertFalse(fieldValueGenerator.matchesFieldExpressionClass(mock(FieldExpression.class)));
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorNotMatchesEvery() throws Exception {
-        new EveryFieldValueGenerator(mock(FieldExpression.class));
-    }
 }

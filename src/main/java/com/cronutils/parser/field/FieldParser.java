@@ -69,10 +69,16 @@ public class FieldParser {
                     return parseBetween(array);
                 } else {
                     String[] values = expression.split("/");
-                    if(values.length == 2) {
-                        String value = values[1];
-                        constraints.validateAllCharsValid(value);
-                        return new Every(constraints, new IntegerFieldValue(Integer.parseInt(value)));
+                    if (values.length == 2) {
+                        // Second value is repeat
+                        final String start = values[0];
+                        final String repeat = values[1];
+                        constraints.validateAllCharsValid(start);
+                        constraints.validateAllCharsValid(repeat);
+                        // Combination of between and every
+                        return new Every(constraints,
+                                                mapToIntegerFieldValue(start),
+                                                mapToIntegerFieldValue(repeat));
                     }else if(values.length == 1){
                         throw new IllegalArgumentException("Missing steps for expression: " + expression);
                     }else {

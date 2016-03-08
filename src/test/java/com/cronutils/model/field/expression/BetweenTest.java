@@ -66,16 +66,16 @@ public class BetweenTest {
 
     @Test
     public void testGetEveryDefault() throws Exception {
-        assertEquals(1, (int)new Between(nullFieldConstraints, new IntegerFieldValue(from), new IntegerFieldValue(to)).getEvery().getTime().getValue());
+        assertEquals(1, (int)new Between(nullFieldConstraints, new IntegerFieldValue(from), new IntegerFieldValue(to)).getEvery().getRepeat().getValue());
     }
 
     @Test
     public void testGetEveryX() throws Exception {
-        assertEquals(every, (int)new Between(nullFieldConstraints, new IntegerFieldValue(from), new IntegerFieldValue(to), new IntegerFieldValue(every)).getEvery().getTime().getValue());
+        assertEquals(every, (int)new Between(nullFieldConstraints, new IntegerFieldValue(from), new IntegerFieldValue(to), new IntegerFieldValue(every)).getEvery().getRepeat().getValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetEveryXBiggerThanRange() throws Exception {
-        assertEquals(1, (int)new Between(nullFieldConstraints, new IntegerFieldValue(from), new IntegerFieldValue(to), new IntegerFieldValue(2 * to)).getEvery().getTime().getValue());
+        assertEquals(1, (int)new Between(nullFieldConstraints, new IntegerFieldValue(from), new IntegerFieldValue(to), new IntegerFieldValue(2 * to)).getEvery().getRepeat().getValue());
     }
 }

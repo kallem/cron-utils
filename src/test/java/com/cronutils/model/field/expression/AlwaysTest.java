@@ -24,7 +24,7 @@ public class AlwaysTest {
         assertEquals(1,
                 (int)new Always(
                         FieldConstraintsBuilder.instance().createConstraintsInstance()
-                ).getEvery().getTime().getValue());
+                ).getEvery().getRepeat().getValue());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class AlwaysTest {
                 (int)new Always(
                         FieldConstraintsBuilder.instance().createConstraintsInstance(),
                         new IntegerFieldValue(value)
-                ).getEvery().getTime().getValue());
+                ).getEvery().getRepeat().getValue());
     }
 
     @Test(expected = NullPointerException.class)

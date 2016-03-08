@@ -41,14 +41,14 @@ public class FieldValueGeneratorFactory {
             return new BetweenFieldValueGenerator(fieldExpression);
         }
         if(fieldExpression instanceof Every){
-            return new EveryFieldValueGenerator(fieldExpression);
+            return new EveryFieldValueGenerator((Every) fieldExpression);
         }
         if(fieldExpression instanceof On){
             On on = (On) fieldExpression;
             if(!SpecialChar.NONE.equals(on.getSpecialChar().getValue())) {
                 throw new RuntimeException(String.format("Cannot create instance for On instance with %s value", on.getSpecialChar()));
             }
-            return new OnFieldValueGenerator(fieldExpression);
+            return new OnFieldValueGenerator(on);
         }
         return new NullFieldValueGenerator(cronField.getExpression());
     }

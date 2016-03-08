@@ -49,12 +49,12 @@ public class ValueMappingFieldExpressionVisitor implements FieldExpressionVisito
     public Between visit(Between between) {
         FieldValue from = transform.apply(between.getFrom());
         FieldValue to = transform.apply(between.getTo());
-        return new Between(destinationConstraint, from, to, between.getEvery().getTime());
+        return new Between(destinationConstraint, from, to, between.getEvery().getRepeat());
     }
 
     @Override
     public Every visit(Every every) {
-        return new Every(destinationConstraint, (IntegerFieldValue)transform.apply(every.getTime()));
+        return new Every(destinationConstraint, (IntegerFieldValue)transform.apply(every.getRepeat()));
     }
 
     @Override

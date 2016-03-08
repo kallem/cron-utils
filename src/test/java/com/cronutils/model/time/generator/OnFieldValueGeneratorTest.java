@@ -65,9 +65,4 @@ public class OnFieldValueGeneratorTest {
         assertTrue(fieldValueGenerator.matchesFieldExpressionClass(mock(On.class)));
         assertFalse(fieldValueGenerator.matchesFieldExpressionClass(mock(FieldExpression.class)));
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConstructorNotMatchesOn() throws Exception {
-        new OnFieldValueGenerator(mock(FieldExpression.class));
-    }
 }

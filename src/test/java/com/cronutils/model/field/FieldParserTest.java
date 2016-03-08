@@ -30,13 +30,13 @@ public class FieldParserTest {
 
     @Test
     public void testParseAlways() throws Exception {
-        assertEquals(1, (int)((Always) parser.parse("*")).getEvery().getTime().getValue());
+        assertEquals(1, (int)((Always) parser.parse("*")).getEvery().getRepeat().getValue());
     }
 
     @Test
     public void testParseAlwaysEveryX() throws Exception {
         int every = 5;
-        assertEquals(every, (int)((Every) parser.parse("*/" + every)).getTime().getValue());
+        assertEquals(every, (int)((Every) parser.parse("*/" + every)).getRepeat().getValue());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class FieldParserTest {
         Between between = (Between) parser.parse(String.format("%s-%s/%s", from, to, every));
         assertEquals(from, (int)((IntegerFieldValue)between.getFrom()).getValue());
         assertEquals(to, (int)((IntegerFieldValue)between.getTo()).getValue());
-        assertEquals(every, (int)(between.getEvery().getTime()).getValue());
+        assertEquals(every, (int)(between.getEvery().getRepeat()).getValue());
     }
 
     @Test(expected = NullPointerException.class)
