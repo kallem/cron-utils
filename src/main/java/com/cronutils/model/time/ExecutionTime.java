@@ -139,9 +139,8 @@ public class ExecutionTime {
      */
     DateTime nextClosestMatch(DateTime date) throws NoSuchValueException {
         List<Integer> year = yearsValueGenerator.generateCandidates(date.getYear(), date.getYear());
-        TimeNode days = generateDays(cronDefinition, date);
+        TimeNode days = null;
         int lowestMonth = months.getValues().get(0);
-        int lowestDay = days.getValues().get(0);
         int lowestHour = hours.getValues().get(0);
         int lowestMinute = minutes.getValues().get(0);
         int lowestSecond = seconds.getValues().get(0);
@@ -149,7 +148,9 @@ public class ExecutionTime {
         NearestValue nearestValue;
         DateTime newDate;
         if(year.isEmpty()){
-            return initDateTime(yearsValueGenerator.generateNextValue(date.getYear()), lowestMonth, lowestDay, lowestHour, lowestMinute, lowestSecond, date.getZone());
+            int newYear = yearsValueGenerator.generateNextValue(date.getYear());
+            days = generateDays(cronDefinition, new DateTime(newYear, lowestMonth, 1, 0, 0));
+            return initDateTime(yearsValueGenerator.generateNextValue(date.getYear()), lowestMonth, days.getValues().get(0), lowestHour, lowestMinute, lowestSecond, date.getZone());
         }
         if(!months.getValues().contains(date.getMonthOfYear())) {
             nearestValue = months.getNextValue(date.getMonthOfYear(), 0);
@@ -162,8 +163,10 @@ public class ExecutionTime {
             if (nearestValue.getValue() < date.getMonthOfYear()) {
             	date = date.plusYears(1);
             }
-            return initDateTime(date.getYear(), nextMonths, lowestDay, lowestHour, lowestMinute, lowestSecond, date.getZone());
+            days = generateDays(cronDefinition, new DateTime(date.getYear(), nextMonths, 1, 0, 0));
+            return initDateTime(date.getYear(), nextMonths, days.getValues().get(0), lowestHour, lowestMinute, lowestSecond, date.getZone());
         }
+        days = generateDays(cronDefinition, date);
         if(!days.getValues().contains(date.getDayOfMonth())) {
             nearestValue = days.getNextValue(date.getDayOfMonth(), 0);
             if(nearestValue.getShifts()>0){
@@ -240,7 +243,21 @@ public class ExecutionTime {
         NearestValue nearestValue;
         DateTime newDate;
         if(year.isEmpty()){
-            return initDateTime(yearsValueGenerator.generatePreviousValue(date.getYear()), highestMonth, highestDay, highestHour, highestMinute, highestSecond, date.getZone());
+            int previousYear = yearsValueGenerator.generatePreviousValue(date.getYear());
+            if(highestDay>28){
+                int highestDayOfMonth = new DateTime(previousYear, highestMonth, 1,0,0).dayOfMonth().getMaximumValue();
+                if(highestDay>highestDayOfMonth){
+                    nearestValue = days.getPreviousValue(highestDay, 1);
+                    if(nearestValue.getShifts()>0){
+                        newDate = new DateTime(previousYear, highestMonth, 1, 23, 59, 59)
+                                .minusMonths(nearestValue.getShifts()).dayOfMonth().withMaximumValue();
+                        return previousClosestMatch(newDate);
+                    }else{
+                        highestDay = nearestValue.getValue();
+                    }
+                }
+            }
+            return initDateTime(previousYear, highestMonth, highestDay, highestHour, highestMinute, highestSecond, date.getZone());
         }
         if(!months.getValues().contains(date.getMonthOfYear())){
             nearestValue = months.getPreviousValue(date.getMonthOfYear(), 0);
@@ -356,26 +373,30 @@ public class ExecutionTime {
         return new Interval(lastExecution(date), date).toDuration();
     }
 
+    /**
+     * Provide feedback if a given date matches the cron expression.
+     * @param date - jodatime DateTime instance. If null, a NullPointerException will be raised.
+     * @return true if date matches cron expression requirements, false otherwise.
+     */
+    public boolean isMatch(DateTime date){
+        return nextExecution(lastExecution(date)).equals(date);
+    }
+
 	private List<Integer> generateDayCandidatesQuestionMarkNotSupported(int year, int month, WeekDay mondayDoWValue) {
 		DateTime date = new DateTime(year, month, 1, 1, 1);
 		Set<Integer> candidates = Sets.newHashSet();
-		log.debug(" computing days for [{}]", daysOfWeekCronField.getExpression().getClass().toString());
 		if (daysOfMonthCronField.getExpression() instanceof Always && daysOfWeekCronField.getExpression() instanceof Always) {
-			log.debug(" computing days 1");
 			candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month).generateCandidates(1,
 					date.dayOfMonth().getMaximumValue()));
 		} else {
 			if (daysOfMonthCronField.getExpression() instanceof Always) {
-				log.debug(" computing days 2");
 				candidates.addAll(FieldValueGeneratorFactory.createDayOfWeekValueGeneratorInstance(daysOfWeekCronField, year, month, mondayDoWValue)
 						.generateCandidates(1, date.dayOfMonth().getMaximumValue()));
 			} else {
 				if (daysOfWeekCronField.getExpression() instanceof Always) {
-					log.debug(" computing days 3");
 					candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month).generateCandidates(
 							1, date.dayOfMonth().getMaximumValue()));
 				} else {
-					log.debug(" computing days 4");
 					candidates.addAll(FieldValueGeneratorFactory.createDayOfWeekValueGeneratorInstance(daysOfWeekCronField, year, month, mondayDoWValue)
 							.generateCandidates(1, date.dayOfMonth().getMaximumValue()));
 					candidates.addAll(FieldValueGeneratorFactory.createDayOfMonthValueGeneratorInstance(daysOfMonthCronField, year, month).generateCandidates(

@@ -9,11 +9,30 @@ import com.cronutils.parser.CronParser;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ExecutionTimeUnixIntegrationTest {
+
+    @Test
+    public void testIsMatchForUnix01(){
+        CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX));
+        String crontab = "* * * * *";//m,h,dom,M,dow
+        Cron cron = parser.parse(crontab);
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+        DateTime scanTime = DateTime.parse("2016-02-29T11:00:00.000-06:00");
+        assertTrue(executionTime.isMatch(scanTime));
+    }
+
+    @Test
+    public void testIsMatchForUnix02(){
+        CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX));
+        String crontab = "0 * * * 1-5";//m,h,dom,M,dow
+        Cron cron = parser.parse(crontab);
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+        DateTime scanTime = DateTime.parse("2016-03-04T11:00:00.000-06:00");
+        assertTrue(executionTime.isMatch(scanTime));
+    }
 
     /**
      * Issue #37: for pattern "every 10 minutes", nextExecution returns a date from past.
@@ -141,7 +160,8 @@ public class ExecutionTimeUnixIntegrationTest {
      * Issue #59: Incorrect next execution time for "month" and "day of week"
      * Considers Month in range 0-11 instead of 1-12
      */
-    public void testCorrectMonthScaleForNextExecution(){
+    @Test
+    public void testCorrectMonthScaleForNextExecution1(){
         CronDefinition cronDefinition = CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX);
         CronParser parser = new CronParser(cronDefinition);
         String crontab = "* * */3 */4 */5";//m,h,dom,M,dow
@@ -149,22 +169,56 @@ public class ExecutionTimeUnixIntegrationTest {
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
         DateTime scanTime = DateTime.parse("2015-12-10T16:32:56.586-08:00");
         DateTime nextExecutionTime = executionTime.nextExecution(scanTime);
-        System.out.println(String.format("Scan time %s, next execution time: %s", scanTime, nextExecutionTime));
+        //DoW: 0-6 -> 0, 5 (sunday, friday)
+        //DoM: 1-31 -> 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31
+        //M: 1-12 -> 1, 5, 9
+        assertEquals(DateTime.parse("2016-01-01T00:00:00.000-08:00"), nextExecutionTime);
+    }
+
+    /**
+     * Issue #59: Incorrect next execution time for "day of month" in "time" situation
+     * dom "* / 4" should mean 1, 5, 9, 13, 17th... of month instead of 4, 8, 12, 16th...
+     */
+    @Test
+    public void testCorrectMonthScaleForNextExecution2(){
+        CronDefinition cronDefinition = CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX);
+        CronParser parser = new CronParser(cronDefinition);
+        String crontab = "* * */4 * *";//m,h,dom,M,dow
+        Cron cron = parser.parse(crontab);
+        ExecutionTime executionTime = ExecutionTime.forCron(cron);
+        DateTime scanTime = DateTime.parse("2015-12-10T16:32:56.586-08:00");
+        DateTime nextExecutionTime = executionTime.nextExecution(scanTime);
+        assertEquals(DateTime.parse("2015-12-13T00:00:00.000-08:00"), nextExecutionTime);
     }
 
     /**
      * Issue #59: Incorrect next execution time for "month" and "day of week"
      * Considers bad DoW
      */
+    @Test
     public void testCorrectNextExecutionDoW(){
         CronDefinition cronDefinition = CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX);
         CronParser parser = new CronParser(cronDefinition);
-        String crontab = "* * */3 */4 */5";
+        String crontab = "* * * * */4";//m,h,dom,M,dow
+        //DoW: 0-6 -> 0, 4 (sunday, thursday)
         Cron cron = parser.parse(crontab);
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
-        DateTime scanTime = DateTime.parse("2015-12-10T16:32:56.586-08:00");
+        DateTime scanTime = DateTime.parse("2016-01-28T16:32:56.586-08:00");
         DateTime nextExecutionTime = executionTime.nextExecution(scanTime);
-        System.out.println(String.format("Scan time %s, next execution time: %s", scanTime, nextExecutionTime));
+        assertEquals(DateTime.parse("2016-02-04T00:00:00.000-08:00"), nextExecutionTime);
     }
 
+    /**
+     * Issue #69: Getting next execution fails on leap-year when using day-of-week
+     */
+    @Test
+    public void testCorrectNextExecutionDoWForLeapYear(){
+        CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.UNIX));
+        String crontab = "0 * * * 1-5";//m,h,dom,M,dow
+        //DoW: 0-6 -> 1, 2, 3, 4, 5 -> in this year:
+        ExecutionTime executionTime = ExecutionTime.forCron(parser.parse(crontab));
+        DateTime scanTime = DateTime.parse("2016-02-29T11:00:00.000-06:00");
+        DateTime nextExecutionTime = executionTime.nextExecution(scanTime);
+        assertEquals(DateTime.parse("2016-02-29T12:00:00.000-06:00"), nextExecutionTime);
+    }
 }

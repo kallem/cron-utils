@@ -5,6 +5,7 @@ import com.cronutils.model.definition.CronDefinition;
 import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.parser.CronParser;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.Interval;
 import org.junit.Before;
 import org.junit.Test;
@@ -177,6 +178,7 @@ public class ExecutionTimeQuartzIntegrationTest {
         DateTime next = executionTime.nextExecution(now);
         assertNotEquals(last, next);
     }
+
     /**
      * Issue: execution time properly calculated
      */
@@ -189,6 +191,72 @@ public class ExecutionTimeQuartzIntegrationTest {
         DateTime next = executionTime.nextExecution(now);
         assertNotEquals(last, next);
     }
+
+    /**
+     * Issue #64: Incorrect next execution time for ranges
+     */
+    @Test
+    public void testExecutionTimeForRanges(){
+        final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("* 10-20 * * * * 2099"));
+        DateTime scanTime = DateTime.parse("2016-02-29T11:00:00.000-06:00");
+        DateTime nextTime = executionTime.nextExecution(scanTime);
+        assertNotNull(nextTime);
+        assertEquals(10, nextTime.getMinuteOfHour());
+    }
+
+    /**
+     * Issue #65: Incorrect last execution time for fixed month
+     */
+    @Test
+    public void testLastExecutionTimeForFixedMonth(){
+        final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("0 30 12 1 9 * 2010"));
+        DateTime scanTime = DateTime.parse("2016-01-08T11:00:00.000-06:00");
+        DateTime lastTime = executionTime.lastExecution(scanTime);
+        assertNotNull(lastTime);
+        assertEquals(9, lastTime.getMonthOfYear());
+    }
+
+    /**
+     * Issue #66: Incorrect Day Of Week processing for Quartz when Month or Year isn't '*'.
+     */
+    @Test
+    public void testNextExecutionRightDoWForFixedMonth(){
+        //cron format: s,m,H,DoM,M,DoW,Y
+        final CronType cronType = CronType.QUARTZ;
+        final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(cronType));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("0 * * ? 5 1 *"));
+        DateTime scanTime = DateTime.parse("2016-03-06T20:17:28.000-03:00");
+        DateTime nextTime = executionTime.nextExecution(scanTime);
+        assertNotNull(nextTime);
+        assertEquals(DateTimeConstants.SUNDAY, nextTime.getDayOfWeek());
+    }
+
+    /**
+     * Issue #66: Incorrect Day Of Week processing for Quartz when Month or Year isn't '*'.
+     */
+    @Test
+    public void testNextExecutionRightDoWForFixedYear(){
+        //cron format: s,m,H,DoM,M,DoW,Y
+        final CronType cronType = CronType.QUARTZ;
+        final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(cronType));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("0 * * ? * 1 2099"));
+        DateTime scanTime = DateTime.parse("2016-03-06T20:17:28.000-03:00");
+        DateTime nextTime = executionTime.nextExecution(scanTime);
+        assertNotNull(nextTime);
+        assertEquals(DateTimeConstants.SUNDAY, nextTime.getDayOfWeek());
+    }
+
+    /**
+     * Issue #70: Illegal question mark value on cron pattern assumed valid.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalQuestionMarkValue(){
+        final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+        ExecutionTime.forCron(quartzParser.parse("0 0 12 1W ? *"));//s,m,H,DoM,M,DoW
+    }
+
     private DateTime truncateToSeconds(DateTime dateTime){
         return new DateTime(
                 dateTime.getYear(),
