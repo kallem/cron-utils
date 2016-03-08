@@ -2,6 +2,7 @@ package com.cronutils.model.time.generator;
 
 import com.cronutils.model.field.expression.Every;
 import com.cronutils.model.field.expression.FieldExpression;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -25,10 +26,23 @@ class EveryFieldValueGenerator extends FieldValueGenerator {
 
     @Override
     public int generateNextValue(int reference) throws NoSuchValueException {
+        //intuition: for valid values, we have: offset+period*i
+        if(reference>=expression.getConstraints().getEndRange()){
+            throw new NoSuchValueException();
+        }
         Every every = (Every)expression;
+        int referenceWithoutOffset = reference-offset();
         int period = every.getTime().getValue();
-        int remainder = reference % period;
-        return reference+(period-remainder);
+        int remainder = referenceWithoutOffset % period;
+
+        int next = reference+(period-remainder);
+        if(next<expression.getConstraints().getStartRange()){
+            return expression.getConstraints().getStartRange();
+        }
+        if(next>expression.getConstraints().getEndRange()){
+            throw new NoSuchValueException();
+        }
+        return next;
     }
 
     @Override
@@ -61,11 +75,17 @@ class EveryFieldValueGenerator extends FieldValueGenerator {
     @Override
     public boolean isMatch(int value) {
         Every every = (Every)expression;
-        return (value % every.getTime().getValue())==0;
+        int start = every.getConstraints().getStartRange();
+        return ((value-start) % every.getTime().getValue()) == 0;
     }
 
     @Override
     protected boolean matchesFieldExpressionClass(FieldExpression fieldExpression) {
         return fieldExpression instanceof Every;
+    }
+
+    @VisibleForTesting
+    int offset(){
+        return expression.getConstraints().getStartRange();
     }
 }
