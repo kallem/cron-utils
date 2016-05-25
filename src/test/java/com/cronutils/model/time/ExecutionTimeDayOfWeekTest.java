@@ -36,11 +36,10 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(2, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        for (int i = 0; i < 7; i++)
-        {
+        for (int i = 0; i < 7; i++) {
             expectedDateTime = expectedDateTime.plusDays(1);
-            DateTime executionDataTime = nextExecutionDateTime;
-            nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+            DateTime executionDateTime = nextExecutionDateTime;
+            nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
             assertEquals(expectedDateTime, nextExecutionDateTime);
         }
 
@@ -62,8 +61,8 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(7);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -83,20 +82,20 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(2);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(6, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusDays(5);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        expectedDateTime = expectedDateTime.plusDays(4);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -116,20 +115,20 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(4, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(5);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -149,20 +148,20 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(6, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(7, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(5);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -182,26 +181,26 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(2);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(4, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(5, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(6, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(2);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -221,20 +220,20 @@ public class ExecutionTimeDayOfWeekTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(4);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(6, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(7, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfWeek()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }

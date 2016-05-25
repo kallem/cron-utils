@@ -36,11 +36,10 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        for (int i = 0; i < 30; i++)
-        {
+        for (int i = 0; i < 30; i++) {
             expectedDateTime = expectedDateTime.plusDays(1);
-            DateTime executionDataTime = nextExecutionDateTime;
-            nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+            DateTime executionDateTime = nextExecutionDateTime;
+            nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
             assertEquals(expectedDateTime, nextExecutionDateTime);
         }
 
@@ -62,8 +61,8 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusMonths(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -83,20 +82,20 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(5);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(15, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(5);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(20, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(20);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -116,20 +115,20 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(11, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(12, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(28);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -149,20 +148,20 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(29, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(30, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(28);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(28, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -182,32 +181,32 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(11, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(12, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(7);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(19, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(20, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(20);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -227,38 +226,38 @@ public class ExecutionTimeDayOfMonthTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(3, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(25);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(28, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(29, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(30, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusDays(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.dayOfMonth()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }

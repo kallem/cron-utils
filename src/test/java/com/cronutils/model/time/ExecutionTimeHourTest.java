@@ -36,8 +36,7 @@ public class ExecutionTimeHourTest {
         assertEquals(14, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        for (int i = 0; i < 24; i++)
-        {
+        for (int i = 0; i < 24; i++) {
             expectedDateTime = expectedDateTime.plusHours(1);
             DateTime executionDataTime = nextExecutionDateTime;
             nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
@@ -94,7 +93,7 @@ public class ExecutionTimeHourTest {
         assertEquals(20, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        expectedDateTime = expectedDateTime.plusHours(50);
+        expectedDateTime = expectedDateTime.plusHours(14);
         executionDataTime = nextExecutionDateTime;
         nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.hourOfDay()));

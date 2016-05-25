@@ -36,11 +36,10 @@ public class ExecutionTimeSecondTest {
         assertEquals(48, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
-        for (int i = 0; i < 60; i++)
-        {
+        for (int i = 0; i < 60; i++) {
             expectedDateTime = expectedDateTime.plusSeconds(1);
-            DateTime executionDataTime = nextExecutionDateTime;
-            nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+            DateTime executionDateTime = nextExecutionDateTime;
+            nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
             assertEquals(expectedDateTime, nextExecutionDateTime);
         }
 
@@ -62,8 +61,8 @@ public class ExecutionTimeSecondTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(60);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -83,20 +82,20 @@ public class ExecutionTimeSecondTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(5);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(15, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(5);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(20, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(50);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -116,20 +115,20 @@ public class ExecutionTimeSecondTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(11, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(12, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(58);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -149,20 +148,20 @@ public class ExecutionTimeSecondTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(58, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(59, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(58);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(57, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -182,32 +181,32 @@ public class ExecutionTimeSecondTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(11, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(12, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(19);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(31, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(32, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(38);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(10, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -227,38 +226,38 @@ public class ExecutionTimeSecondTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(58, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(59, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(0, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(1, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusSeconds(55);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(57, nextExecutionDateTime.get(DateTimeFieldType.secondOfMinute()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }

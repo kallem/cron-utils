@@ -38,14 +38,14 @@ public class ExecutionTimeYearTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2017, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2018, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
     }
@@ -63,10 +63,10 @@ public class ExecutionTimeYearTest {
         DateTime nextExecutionDateTime = executionTime.nextExecution(startDateTime);
         assertEquals(2017, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
-        DateTime executionDataTime = nextExecutionDateTime;
+        DateTime executionDateTime = nextExecutionDateTime;
 
         try {
-            executionTime.nextExecution(executionDataTime);
+            executionTime.nextExecution(executionDateTime);
         } catch (final IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -87,19 +87,19 @@ public class ExecutionTimeYearTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(2);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2019, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2020, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         try {
-            executionTime.nextExecution(executionDataTime);
+            executionTime.nextExecution(executionDateTime);
         } catch (final IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -120,19 +120,19 @@ public class ExecutionTimeYearTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2018, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2019, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         try {
-            executionTime.nextExecution(executionDataTime);
+            executionTime.nextExecution(executionDateTime);
         } catch (final IllegalArgumentException e) {
             assertTrue(true);
         }
@@ -153,31 +153,31 @@ public class ExecutionTimeYearTest {
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        DateTime executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        DateTime executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2018, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2019, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(5);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2024, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         expectedDateTime = expectedDateTime.plusYears(1);
-        executionDataTime = nextExecutionDateTime;
-        nextExecutionDateTime = executionTime.nextExecution(executionDataTime);
+        executionDateTime = nextExecutionDateTime;
+        nextExecutionDateTime = executionTime.nextExecution(executionDateTime);
         assertEquals(2025, nextExecutionDateTime.get(DateTimeFieldType.year()));
         assertEquals(expectedDateTime, nextExecutionDateTime);
 
         try {
-            executionTime.nextExecution(executionDataTime);
+            executionTime.nextExecution(executionDateTime);
         } catch (final IllegalArgumentException e) {
             assertTrue(true);
         }
