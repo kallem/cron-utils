@@ -144,6 +144,26 @@ public class FieldConstraintsBuilder {
     }
 
     /**
+     * Shifts integer representation of weekday/month names
+     * @param shiftSize - size of the shift
+     * @return same FieldConstraintsBuilder instance
+     */
+    public FieldConstraintsBuilder withShiftedStringMapping(int shiftSize){
+        for(String key : this.stringMapping.keySet()) {
+            Integer value = this.stringMapping.get(key);
+            value += shiftSize;
+            if(value > endRange) {
+                value -= endRange;
+            }
+            if(value < startRange) {
+                value += (startRange - endRange);
+            }
+            this.stringMapping.put(key, value);
+        }
+        return this;
+    }
+
+    /**
      * Creates FieldConstraints instance based on previously built parameters
      * @return new FieldConstraints instance
      */
@@ -198,3 +218,4 @@ public class FieldConstraintsBuilder {
         return new FieldConstraintsBuilder();
     }
 }
+

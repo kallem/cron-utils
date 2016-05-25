@@ -121,6 +121,7 @@ public class ExecutionTimeCustomDefinitionIntegrationTest {
      * Reported case: BetweenDayOfWeekValueGenerator does not work for the first day of a month in some cases.
      * Expected: first day of month should be returned ok
      */
+    @Test
     public void testCronExpressionBetweenDayOfWeekValueGeneratorCorrectFirstDayOfMonth() {
         CronDefinition cronDefinition = CronDefinitionBuilder.defineCron()
                 .withMinutes().and()
@@ -140,7 +141,6 @@ public class ExecutionTimeCustomDefinitionIntegrationTest {
         CronParser parser = new CronParser(cronDefinition);
         Cron cron = parser.parse("30 3 * * MON-FRI");
         DateTime sameDayBeforeEventStartDateTime = DateTime.parse("1970-01-01T00:00:00.000-03:00");
-        System.out.println(ExecutionTime.forCron(cron).nextExecution(sameDayBeforeEventStartDateTime));
         assertEquals(1, ExecutionTime.forCron(cron).nextExecution(sameDayBeforeEventStartDateTime).getDayOfMonth());
         DateTime sameDayAfterEventStartDateTime = DateTime.parse("1970-01-01T12:00:00.000-03:00");
         assertEquals(2, ExecutionTime.forCron(cron).nextExecution(sameDayAfterEventStartDateTime).getDayOfMonth());

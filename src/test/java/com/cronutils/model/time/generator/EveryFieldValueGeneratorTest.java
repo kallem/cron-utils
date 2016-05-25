@@ -1,5 +1,7 @@
 package com.cronutils.model.time.generator;
 
+import com.cronutils.model.field.CronField;
+import com.cronutils.model.field.CronFieldName;
 import com.cronutils.model.field.constraint.FieldConstraints;
 import com.cronutils.model.field.constraint.FieldConstraintsBuilder;
 import com.cronutils.model.field.expression.Every;
@@ -25,21 +27,21 @@ import static org.mockito.Mockito.mock;
  * limitations under the License.
  */
 public class EveryFieldValueGeneratorTest {
+    private FieldConstraints constraints;
     private EveryFieldValueGenerator fieldValueGenerator;
 
     private int time = 7;
 
     @Before
     public void setUp(){
-        FieldConstraints constraints = FieldConstraintsBuilder.instance().createConstraintsInstance();
-        fieldValueGenerator = new EveryFieldValueGenerator(new Every(constraints, new IntegerFieldValue(time)));
+        constraints = FieldConstraintsBuilder.instance().createConstraintsInstance();
+        fieldValueGenerator = new EveryFieldValueGenerator(new CronField(CronFieldName.HOUR, new Every(new IntegerFieldValue(time)), constraints));
     }
 
-    @Test()
+    @Test
     public void testGenerateNextValue() throws Exception {
         for(int j=1; j<=10; j++){
             int value = time*j-(1+((int)(2*Math.random())));
-            System.out.println(String.format("%s : %s vs %s", value, j*time, fieldValueGenerator.generateNextValue(value)));//TODO delete
             assertEquals(j*time, fieldValueGenerator.generateNextValue(value));
         }
     }
@@ -73,6 +75,6 @@ public class EveryFieldValueGeneratorTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorNotMatchesEvery() throws Exception {
-        new EveryFieldValueGenerator(mock(FieldExpression.class));
+        new EveryFieldValueGenerator(new CronField(CronFieldName.HOUR, mock(FieldExpression.class), constraints));
     }
 }

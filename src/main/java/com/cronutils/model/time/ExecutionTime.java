@@ -249,7 +249,7 @@ public class ExecutionTime {
                 if(highestDay>highestDayOfMonth){
                     nearestValue = days.getPreviousValue(highestDay, 1);
                     if(nearestValue.getShifts()>0){
-                        newDate = new DateTime(previousYear, highestMonth, 1, 23, 59, 59)
+                        newDate = new DateTime(previousYear, highestMonth, 1, 23, 59, 59, date.getZone())
                                 .minusMonths(nearestValue.getShifts()).dayOfMonth().withMaximumValue();
                         return previousClosestMatch(newDate);
                     }else{
@@ -264,7 +264,7 @@ public class ExecutionTime {
             int previousMonths = nearestValue.getValue();
             if(nearestValue.getShifts()>0){
                 newDate =
-                        new DateTime(date.getYear(), 12, 31, 23, 59, 59).minusYears(nearestValue.getShifts());
+                        new DateTime(date.getYear(), 12, 31, 23, 59, 59, date.getZone()).minusYears(nearestValue.getShifts());
                 return previousClosestMatch(newDate);
             }
             return initDateTime(date.getYear(), previousMonths, highestDay, highestHour, highestMinute, highestSecond, date.getZone());
@@ -272,7 +272,7 @@ public class ExecutionTime {
         if(!days.getValues().contains(date.getDayOfMonth())){
             nearestValue = days.getPreviousValue(date.getDayOfMonth(), 0);
             if(nearestValue.getShifts()>0){
-                newDate = new DateTime(date.getYear(), date.getMonthOfYear(), 1, 23, 59, 59)
+                newDate = new DateTime(date.getYear(), date.getMonthOfYear(), 1, 23, 59, 59, date.getZone())
                         .minusMonths(nearestValue.getShifts()).dayOfMonth().withMaximumValue();
                 return previousClosestMatch(newDate);
             }
@@ -283,7 +283,7 @@ public class ExecutionTime {
             if(nearestValue.getShifts()>0){
                 newDate =
                         new DateTime(date.getYear(), date.getMonthOfYear(),
-                                date.getDayOfMonth(), 23, 59, 59).minusDays(nearestValue.getShifts());
+                                date.getDayOfMonth(), 23, 59, 59, date.getZone()).minusDays(nearestValue.getShifts());
                 return previousClosestMatch(newDate);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), nearestValue.getValue(), highestMinute, highestSecond, date.getZone());
@@ -293,7 +293,7 @@ public class ExecutionTime {
             if(nearestValue.getShifts()>0){
                 newDate =
                         new DateTime(date.getYear(), date.getMonthOfYear(),
-                                date.getDayOfMonth(), date.getHourOfDay(), 59, 59).minusHours(nearestValue.getShifts());
+                                date.getDayOfMonth(), date.getHourOfDay(), 59, 59, date.getZone()).minusHours(nearestValue.getShifts());
                 return previousClosestMatch(newDate);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), nearestValue.getValue(), highestSecond, date.getZone());
@@ -305,7 +305,7 @@ public class ExecutionTime {
                 newDate =
                         new DateTime(date.getYear(), date.getMonthOfYear(),
                                 date.getDayOfMonth(), date.getHourOfDay(),
-                                date.getMinuteOfHour(), 59).minusMinutes(nearestValue.getShifts());
+                                date.getMinuteOfHour(), 59, date.getZone()).minusMinutes(nearestValue.getShifts());
                 return previousClosestMatch(newDate);
             }
             return initDateTime(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(), date.getHourOfDay(), date.getMinuteOfHour(), previousSeconds, date.getZone());
@@ -315,7 +315,7 @@ public class ExecutionTime {
 
     TimeNode generateDays(CronDefinition cronDefinition, DateTime date){
         boolean questionMarkSupported =
-                cronDefinition.getFieldDefinition(DAY_OF_WEEK).getConstraints().isSpecialCharAllowed(QUESTION_MARK);
+                cronDefinition.getFieldDefinition(DAY_OF_WEEK).getConstraints().getSpecialChars().contains(QUESTION_MARK);
         if(questionMarkSupported){
             return new TimeNode(
                     generateDayCandidatesQuestionMarkSupported(
@@ -434,12 +434,38 @@ public class ExecutionTime {
 
     private DateTime initDateTime(int years, int monthsOfYear, int dayOfMonth,
                                   int hoursOfDay, int minutesOfHour, int secondsOfMinute, DateTimeZone timeZone) {
-        return new DateTime(0, 1, 1, 0, 0, 0, timeZone)
-                .plusYears(years)
-                .plusMonths(monthsOfYear - 1)
-                .plusDays(dayOfMonth - 1)
-                .plusHours(hoursOfDay)
-                .plusMinutes(minutesOfHour)
-                .plusSeconds(secondsOfMinute);
+        DateTime date =
+                new DateTime(0, 1, 1, 0, 0, 0, timeZone)
+                        .plusYears(years)
+                        .plusMonths(monthsOfYear - 1)
+                        .plusDays(dayOfMonth - 1)
+                        .plusHours(hoursOfDay)
+                        .plusMinutes(minutesOfHour)
+                        .plusSeconds(secondsOfMinute);
+        return ensureSameDate(date, years, monthsOfYear, dayOfMonth,
+                hoursOfDay, minutesOfHour, secondsOfMinute, timeZone);
+    }
+
+    private DateTime ensureSameDate(DateTime date, int years, int monthsOfYear, int dayOfMonth,
+                                    int hoursOfDay, int minutesOfHour, int secondsOfMinute, DateTimeZone timeZone){
+        if(date.getSecondOfMinute()!=secondsOfMinute){
+            date = date.plusSeconds(secondsOfMinute-date.getSecondOfMinute());
+        }
+        if(date.getMinuteOfHour()!=minutesOfHour){
+            date = date.plusMinutes(minutesOfHour-date.getMinuteOfHour());
+        }
+        if(date.getHourOfDay()!=hoursOfDay){
+            date = date.plusHours(hoursOfDay-date.getHourOfDay());
+        }
+        if(date.getDayOfMonth()!=dayOfMonth){
+            date = date.plusDays(dayOfMonth-date.getDayOfMonth());
+        }
+        if(date.getMonthOfYear()!=monthsOfYear){
+            date = date.plusMonths(monthsOfYear-date.getMonthOfYear());
+        }
+        if(date.getYear()!=years){
+            date = date.plusYears(years-date.getYear());
+        }
+        return date;
     }
 }
