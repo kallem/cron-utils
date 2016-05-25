@@ -1,9 +1,10 @@
 package com.cronutils.model.field.definition;
 
-import com.cronutils.mapper.WeekDay;
 import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.field.CronFieldName;
+import com.cronutils.mapper.WeekDay;
 import org.apache.commons.lang3.Validate;
+
 /*
  * Copyright 2015 jmrozanec
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +36,9 @@ public class FieldDayOfWeekDefinitionBuilder extends FieldSpecialCharsDefinition
      * @return this FieldSpecialCharsDefinitionBuilder instance
      */
     public FieldDayOfWeekDefinitionBuilder withMondayDoWValue(int mondayDoW){
+        if(mondayDoW != this.mondayDoWValue) {
+            this.constraints.withShiftedStringMapping(mondayDoW - this.mondayDoWValue);
+        }
         this.mondayDoWValue = mondayDoW;
         return this;
     }

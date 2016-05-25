@@ -1,16 +1,22 @@
 package com.cronutils.model.time;
 
+import com.cronutils.model.Cron;
 import com.cronutils.model.CronType;
 import com.cronutils.model.definition.CronDefinition;
 import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.parser.CronParser;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import java.text.SimpleDateFormat;
 
 /*
  * Copyright 2015 jmrozanec
@@ -26,7 +32,7 @@ import static org.junit.Assert.*;
  */
 public class ExecutionTimeQuartzIntegrationTest {
     private CronParser quartzCronParser;
-    private static final String EVERY_SECOND = "* * * * * * *";
+    private static final String EVERY_SECOND = "* * * * * ? *";
 
     @Before
     public void setUp(){
@@ -147,7 +153,7 @@ public class ExecutionTimeQuartzIntegrationTest {
      */
     @Test
     public void testTimeShiftingProperlyDone() throws Exception {
-        ExecutionTime executionTime = ExecutionTime.forCron(quartzCronParser.parse("0 0/10 22 * * *"));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzCronParser.parse("0 0/10 22 ? * *"));
         DateTime nextExecution =
                 executionTime.nextExecution(
                         DateTime.now()
@@ -163,7 +169,7 @@ public class ExecutionTimeQuartzIntegrationTest {
      */
     @Test
     public void testMonthRangeExecutionTime(){
-        ExecutionTime.forCron(quartzCronParser.parse("0 0 0 * JUL-AUG * *"));
+        ExecutionTime.forCron(quartzCronParser.parse("0 0 0 * JUL-AUG ? *"));
     }
 
     /**
@@ -198,7 +204,7 @@ public class ExecutionTimeQuartzIntegrationTest {
     @Test
     public void testExecutionTimeForRanges(){
         final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
-        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("* 10-20 * * * * 2099"));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("* 10-20 * * * ? 2099"));
         DateTime scanTime = DateTime.parse("2016-02-29T11:00:00.000-06:00");
         DateTime nextTime = executionTime.nextExecution(scanTime);
         assertNotNull(nextTime);
@@ -211,7 +217,7 @@ public class ExecutionTimeQuartzIntegrationTest {
     @Test
     public void testLastExecutionTimeForFixedMonth(){
         final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
-        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("0 30 12 1 9 * 2010"));
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzParser.parse("0 30 12 1 9 ? 2010"));
         DateTime scanTime = DateTime.parse("2016-01-08T11:00:00.000-06:00");
         DateTime lastTime = executionTime.lastExecution(scanTime);
         assertNotNull(lastTime);
@@ -255,6 +261,145 @@ public class ExecutionTimeQuartzIntegrationTest {
     public void testIllegalQuestionMarkValue(){
         final CronParser quartzParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
         ExecutionTime.forCron(quartzParser.parse("0 0 12 1W ? *"));//s,m,H,DoM,M,DoW
+    }
+
+    /**
+     * Issue #72: Stacktrace printed.
+     * TODO: Although test is passing, there is some stacktrace printed indicating there may be something wrong.
+     * TODO: We should analyze it and fix the eventual issue.
+     */
+    @Test//TODO
+    public void testNextExecutionProducingInvalidPrintln(){
+        String cronText = "0 0/15 * * * ?";
+        CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+        Cron cron = parser.parse(cronText);
+        final ExecutionTime executionTime = ExecutionTime.forCron(cron);
+    }
+
+    /**
+     * Issue #73: NextExecution not working as expected
+     */
+    @Test
+    public void testNextExecutionProducingInvalidValues(){
+        String cronText = "0 0 18 ? * MON";
+        CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+        Cron cron = parser.parse(cronText);
+        final ExecutionTime executionTime = ExecutionTime.forCron(cron);
+        DateTime now = DateTime.parse("2016-03-18T19:02:51.424+09:00");
+        DateTime next = executionTime.nextExecution(now);
+        DateTime nextNext = executionTime.nextExecution(next);
+        assertEquals(DateTimeConstants.MONDAY, next.getDayOfWeek());
+        assertEquals(DateTimeConstants.MONDAY, nextNext.getDayOfWeek());
+        assertEquals(18, next.getHourOfDay());
+        assertEquals(18, nextNext.getHourOfDay());
+    }
+
+    /**
+     * Test for issue #83
+     * https://github.com/jmrozanec/cron-utils/issues/83
+     * Reported case: Candidate values are false when combining range and multiple patterns
+     * Expected: Candidate values should be correctly identified
+     * @throws Exception
+     */
+    @Test
+    public void testMultipleMinuteIntervalTimeFromLastExecution() throws Exception {
+        String expression = "* 8-10,23-25,38-40,53-55 * * * ? *"; // every second for intervals of minutes
+        ExecutionTime executionTime = ExecutionTime.forCron(quartzCronParser.parse(expression));
+
+        assertEquals(301, executionTime.timeFromLastExecution(new DateTime().withTime(3, 1, 0, 0)).getStandardSeconds());
+        assertEquals(1, executionTime.timeFromLastExecution(new DateTime().withTime(13, 8, 4, 0)).getStandardSeconds());
+        assertEquals(1, executionTime.timeFromLastExecution(new DateTime().withTime(13, 11, 0, 0)).getStandardSeconds());
+        assertEquals(63, executionTime.timeFromLastExecution(new DateTime().withTime(13, 12, 2, 0)).getStandardSeconds());
+    }
+
+    /**
+     * Test for issue #83
+     * https://github.com/jmrozanec/cron-utils/issues/83
+     * Reported case: Candidate values are false when combining range and multiple patterns
+     * Expected: Candidate values should be correctly identified
+     * @throws Exception
+     */
+    @Test
+    public void testMultipleMinuteIntervalMatch() throws Exception {
+        CronParser cronParser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(com.cronutils.model.CronType.QUARTZ));
+
+        assertEquals(ExecutionTime.forCron(cronParser.parse("* * 21-23,0-4 * * ?")).isMatch(new DateTime(2014, 9, 20, 20, 0, 0)), false);
+        assertEquals(ExecutionTime.forCron(cronParser.parse("* * 21-23,0-4 * * ?")).isMatch(new DateTime(2014, 9, 20, 21, 0, 0)), true);
+        assertEquals(ExecutionTime.forCron(cronParser.parse("* * 21-23,0-4 * * ?")).isMatch(new DateTime(2014, 9, 20, 0, 0, 0)), true);
+        assertEquals(ExecutionTime.forCron(cronParser.parse("* * 21-23,0-4 * * ?")).isMatch(new DateTime(2014, 9, 20, 4, 0, 0)), true);
+        assertEquals(ExecutionTime.forCron(cronParser.parse("* * 21-23,0-4 * * ?")).isMatch(new DateTime(2014, 9, 20, 5, 0, 0)), false);
+    }
+    
+    @Test
+    public void testDayLightSavingsSwitch() {
+        try {
+            // every 2 minutes
+            String expression = "* 0/2 * * * ?";
+            CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+            Cron cron = parser.parse(expression);
+
+            // SIMULATE SCHEDULE JUST PRIOR TO DST
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy MM dd HH:mm:ss").withZone(DateTimeZone.forID("America/Denver"));
+            DateTime prevRun = new DateTime(formatter.parseDateTime("2016 03 13 01:59:59"));
+
+            ExecutionTime executionTime = ExecutionTime.forCron(cron);          
+            DateTime nextRun = executionTime.nextExecution(prevRun);
+            // Assert we got 3:00am
+            assertEquals("Incorrect Hour", 3, nextRun.getHourOfDay());
+            assertEquals("Incorrect Minute", 0, nextRun.getMinuteOfHour());         
+
+            // SIMULATE SCHEDULE POST DST - simulate a schedule after DST 3:01 with the same cron, expect 3:02
+            nextRun = nextRun.plusMinutes(1);
+            nextRun = executionTime.nextExecution(nextRun);
+            assertEquals("Incorrect Hour", 3, nextRun.getHourOfDay());
+            assertEquals("Incorrect Minute", 2, nextRun.getMinuteOfHour());
+
+            // SIMULATE SCHEDULE NEXT DAY DST - verify after midnight on DST switch things still work as expected
+            prevRun = new DateTime(new SimpleDateFormat("yyyy MM dd HH:mm:ss").parseObject("2016 03 14 00:00:59"));
+            nextRun = executionTime.nextExecution(prevRun);
+            assertEquals("incorrect hour", nextRun.getHourOfDay(), 0);
+            assertEquals("incorrect minute", nextRun.getMinuteOfHour(), 2);
+        }
+        catch(Exception e) {
+            fail("Exception Received: " +e.getMessage());
+        }
+    }
+
+    /**
+     * Issue #75: W flag not behaving as expected: did not return first workday of month, but an exception
+     */
+    @Test
+    public void testCronWithFirstWorkDayOfWeek() {
+        try {
+            String cronText = "0 0 12 1W * ? *";
+            CronParser parser = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+            Cron cron = parser.parse(cronText);
+            DateTime dt = new DateTime(new SimpleDateFormat("yyyy MM dd HH:mm:ss").parseObject("2016 03 29 00:00:59"));
+
+            ExecutionTime executionTime = ExecutionTime.forCron(cron);          
+            DateTime nextRun = executionTime.nextExecution(dt);
+            assertEquals("incorrect Day", nextRun.getDayOfMonth(), 1); // should be April 1st (Friday)            
+        }
+        catch(Exception e) {        
+            fail("Exception Received: "+e.getMessage());
+        }        
+    }
+
+    /**
+     * Issue #81: MON-SUN flags are not mapped correctly to 1-7 number representations 
+     * Fixed by adding shifting function when changing monday position.
+     */
+    @Test
+    public void testDayOfWeekMapping() {
+        CronDefinition cronDefinition = CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ);
+        CronParser parser = new CronParser(cronDefinition);
+        DateTime fridayMorning = new DateTime(2016, 4, 22, 0, 0, 0, DateTimeZone.UTC);
+        ExecutionTime numberExec = ExecutionTime.forCron(parser.parse("0 0 12 ? * 2,3,4,5,6 *"));
+        ExecutionTime nameExec = ExecutionTime.forCron(parser.parse("0 0 12 ? * MON,TUE,WED,THU,FRI *"));
+        assertEquals("same generated dates",
+                numberExec.nextExecution(fridayMorning),
+                nameExec.nextExecution(fridayMorning)
+        );
     }
 
     private DateTime truncateToSeconds(DateTime dateTime){
